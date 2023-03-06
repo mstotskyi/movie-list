@@ -2,6 +2,7 @@
   "name": "movie-list",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://mstotskyi.github.io/movie-list",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
@@ -11,6 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@typescript-eslint/typescript-estree": "^5.54.0",
+    "gh-pages": "^5.0.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.2",
     "prettier": "^2.8.4",
