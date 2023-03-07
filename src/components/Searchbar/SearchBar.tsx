@@ -2,24 +2,52 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import styles from "../Searchbar/Searchbar.module.css";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+// import InputLabel from "@mui/material/InputLabel";
 
 interface Props {
-  getSearchQuery: (searchQery: string) => void;
+  getSearchQueryName: (searchQueryName: string) => void;
+  getSearchQueryYear: (searchQueryYear: string) => void;
+  getSearchQueryType: (searchQueryType: string) => void;
 }
-export function Searchbar({ getSearchQuery }: Props) {
-  const [searchQery, setSearchQuery] = useState("");
+export function Searchbar({
+  getSearchQueryName,
+  getSearchQueryYear,
+  getSearchQueryType,
+}: Props) {
+  const [searchQueryName, setSearchQueryName] = useState("");
+  const [searchQueryYear, setSearchQueryYear] = useState("");
+  const [searchQueryType, setSearchQueryType] = useState("");
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    getSearchQuery(searchQery);
-    setSearchQuery("");
+    getSearchQueryName(searchQueryName);
+    getSearchQueryYear(searchQueryYear);
+    getSearchQueryType(searchQueryType);
+    setSearchQueryName("");
+    setSearchQueryYear("");
+    setSearchQueryType("");
   };
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    setSearchQuery(e.target.value);
+    switch (e.target.name) {
+      case "title":
+        setSearchQueryName(e.target.value);
+        break;
+      case "year":
+        setSearchQueryYear(e.target.value);
+        break;
+      default:
+        return;
+    }
+  };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSearchQueryType(event.target.value as string);
   };
 
   return (
@@ -28,14 +56,41 @@ export function Searchbar({ getSearchQuery }: Props) {
         <TextField
           className={styles.SearchForm__input}
           id="outlined-basic"
-          label="Search"
+          label="Search by name"
+          name="title"
           variant="outlined"
-          value={searchQery}
+          value={searchQueryName}
+          required
           type="text"
           autoComplete="off"
           autoFocus
           onChange={handleOnChange}
         />
+        <TextField
+          className={styles.SearchForm__input}
+          id="outlined-basic"
+          label="Search by year"
+          name="year"
+          variant="outlined"
+          value={searchQueryYear}
+          type="text"
+          autoComplete="off"
+          title="Year"
+          inputProps={{ inputMode: "numeric", pattern: "^[1-9][0-9]{3}$" }}
+          onChange={handleOnChange}
+        />
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={searchQueryType}
+          label="Type"
+          onChange={handleChange}
+          placeholder="Type"
+        >
+          <MenuItem value="movie">movie</MenuItem>
+          <MenuItem value="series">series</MenuItem>
+          <MenuItem value="episode">episode</MenuItem>
+        </Select>
         <Button
           variant="contained"
           type="submit"

@@ -8,38 +8,46 @@ import { Options } from "../../services/types";
 const newPicsApiService = new PicsApiService();
 
 interface Props {
-  searchQuery: string;
+  searchQueryName: string;
+  searchQueryYear: string;
+  searchQueryType: string;
 }
 
-export function MovieGallery({ searchQuery }: Props) {
+export function MovieGallery({
+  searchQueryName,
+  searchQueryYear,
+  searchQueryType,
+}: Props) {
   const [searchResults, setSearchResults] = useState<Options[]>([]);
   const [status, setStatus] = useState<string>("init");
   const [showSpiner, setShowSpiner] = useState<boolean>(false);
 
   useEffect(() => {
-    if (searchQuery === "") {
+    if (searchQueryName === "") {
       return;
     }
     setStatus("pending");
-    newPicsApiService.query = searchQuery;
+    newPicsApiService.queryName = searchQueryName;
+    newPicsApiService.queryYear = searchQueryYear;
+    newPicsApiService.queryType = searchQueryType;
     newPicsApiService.resetPage();
     newPicsApiService
-      .fetchPictures()
+      .fetchMovies()
       .then((result) => {
-        console.log(result);
         setSearchResults(result);
         setStatus("success");
       })
       .catch((error) => {
         setStatus("error");
       });
-  }, [searchQuery]);
+  }, [searchQueryName, searchQueryYear, searchQueryType]);
+
   const handleOnClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     newPicsApiService.incrementPage();
     newPicsApiService
-      .fetchPictures()
+      .fetchMovies()
       .then((result: []) => {
         setSearchResults((prevState) => [...prevState, ...result]);
         setShowSpiner(false);
@@ -63,18 +71,20 @@ export function MovieGallery({ searchQuery }: Props) {
   if (status === "success") {
     return (
       <>
-        <ul className={styles.MovieGallery}>
-          <MovieGalleryItem movies={searchResults} />
-        </ul>
-        {showSpiner && <Spiner />}
-        <div className={styles.MovieGallery__Button__wrapper}>
-          <Button
-            className={styles.MovieGallery__Button}
-            variant="contained"
-            onClick={handleOnClick}
-          >
-            ShowMore
-          </Button>
+        <div>
+          <ul className={styles.MovieGallery}>
+            <MovieGalleryItem movies={searchResults} />
+          </ul>
+          {showSpiner && <Spiner />}
+          <div className={styles.MovieGallery__Button__wrapper}>
+            <Button
+              className={styles.MovieGallery__Button}
+              variant="contained"
+              onClick={handleOnClick}
+            >
+              ShowMore
+            </Button>
+          </div>
         </div>
       </>
     );
