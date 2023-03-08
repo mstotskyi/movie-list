@@ -4,6 +4,7 @@ export default class MoviesApiService {
   searchQueryType: string;
   page: number;
   total: number;
+  response: boolean;
 
   constructor() {
     this.searchQueryName = " ";
@@ -11,6 +12,7 @@ export default class MoviesApiService {
     this.searchQueryType = "";
     this.page = 1;
     this.total = 0;
+    this.response = false;
   }
 
   fetchMovies() {
@@ -20,11 +22,9 @@ export default class MoviesApiService {
     return fetch(URL)
       .then((response) => response.json())
       .then((data) => {
-        if (data.Response === "True") {
-          this.getTotal(data.totalResults);
-          return data.Search;
-        }
-        return null;
+        this.getTotal(data.totalResults);
+
+        return data;
       });
   }
 
@@ -49,6 +49,9 @@ export default class MoviesApiService {
   get queryType() {
     return this.searchQueryType;
   }
+  get queryResponse() {
+    return this.response;
+  }
 
   set queryName(newQueryName) {
     this.searchQueryName = newQueryName;
@@ -60,5 +63,8 @@ export default class MoviesApiService {
 
   set queryType(newQueryType) {
     this.searchQueryType = newQueryType;
+  }
+  set queryResponse(newQueryResponse) {
+    this.response = newQueryResponse;
   }
 }

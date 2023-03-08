@@ -3,7 +3,7 @@ import styles from "../MovieGallery/MovieGallery.module.css";
 import PicsApiService from "../../services/apiService";
 import { MovieGalleryItem } from "../MovieGalleryItem/MovieGalleryItem";
 import Spiner from "../Loader/Loader";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import { Options } from "../../services/types";
 const newPicsApiService = new PicsApiService();
 
@@ -34,7 +34,7 @@ export function MovieGallery({
     newPicsApiService
       .fetchMovies()
       .then((result) => {
-        setSearchResults(result);
+        setSearchResults(result.Search);
         setStatus("success");
       })
       .catch((error) => {
@@ -48,8 +48,8 @@ export function MovieGallery({
     newPicsApiService.incrementPage();
     newPicsApiService
       .fetchMovies()
-      .then((result: []) => {
-        setSearchResults((prevState) => [...prevState, ...result]);
+      .then((result) => {
+        setSearchResults((prevState) => [...prevState, ...result.Search]);
         setShowSpiner(false);
         setStatus("success");
         window.scrollTo({
@@ -71,21 +71,32 @@ export function MovieGallery({
   if (status === "success") {
     return (
       <>
-        <div>
-          <ul className={styles.MovieGallery}>
-            <MovieGalleryItem movies={searchResults} />
-          </ul>
-          {showSpiner && <Spiner />}
-          <div className={styles.MovieGallery__Button__wrapper}>
-            <Button
+        {searchResults ? (
+          <>
+            <ul className={styles.MovieGallery}>
+              <MovieGalleryItem movies={searchResults} />
+            </ul>
+            {showSpiner && <Spiner />}
+
+            <button
+              className={styles.MovieGallery__Button}
+              type="button"
+              onClick={handleOnClick}
+            >
+              LoadMore
+            </button>
+          </>
+        ) : (
+          <p>Sorry, nothing was found for your query!</p>
+        )}
+
+        {/* <Button
               className={styles.MovieGallery__Button}
               variant="contained"
               onClick={handleOnClick}
             >
               ShowMore
-            </Button>
-          </div>
-        </div>
+            </Button> */}
       </>
     );
   }

@@ -1,17 +1,22 @@
 import { Circles } from "react-loader-spinner";
-// import styles from "components/Loader/Loader.module.css";
 
 export default function Spiner() {
+  const style: {} = {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  };
   return (
-    <Circles
-      height="80"
-      width="80"
-      color="#4fa94d"
-      ariaLabel="circles-loading"
-      wrapperStyle={{}}
-      wrapperClass=""
-      visible={true}
-      // className={styles.loader}
-    />
+    <div style={style}>
+      <Circles
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="circles-loading"
+        wrapperClass=""
+        visible={true}
+      />
+    </div>
   );
 }
