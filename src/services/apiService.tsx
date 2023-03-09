@@ -17,7 +17,7 @@ export default class MoviesApiService {
 
   fetchMovies() {
     const API_KEY = "a5f3b75f";
-    const BASE_URL = "http://www.omdbapi.com/";
+    const BASE_URL = "https://www.omdbapi.com/";
     const URL = `${BASE_URL}?s=${this.searchQueryName}&y=${this.searchQueryYear}&type=${this.searchQueryType}&apikey=${API_KEY}&page=${this.page}`;
     return fetch(URL)
       .then((response) => response.json())

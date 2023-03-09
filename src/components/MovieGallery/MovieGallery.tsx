@@ -3,7 +3,6 @@ import styles from "../MovieGallery/MovieGallery.module.css";
 import PicsApiService from "../../services/apiService";
 import { MovieGalleryItem } from "../MovieGalleryItem/MovieGalleryItem";
 import Spiner from "../Loader/Loader";
-// import Button from "@mui/material/Button";
 import { Options } from "../../services/types";
 const newPicsApiService = new PicsApiService();
 
@@ -21,6 +20,7 @@ export function MovieGallery({
   const [searchResults, setSearchResults] = useState<Options[]>([]);
   const [status, setStatus] = useState<string>("init");
   const [showSpiner, setShowSpiner] = useState<boolean>(false);
+  const [totalResults, setTotalResults] = useState<number>(0);
 
   useEffect(() => {
     if (searchQueryName === "") {
@@ -35,6 +35,7 @@ export function MovieGallery({
       .fetchMovies()
       .then((result) => {
         setSearchResults(result.Search);
+        setTotalResults(result.totalResults);
         setStatus("success");
       })
       .catch((error) => {
@@ -69,35 +70,27 @@ export function MovieGallery({
     return <Spiner />;
   }
   if (status === "success") {
-    return (
+    console.log(searchResults);
+    return searchResults ? (
       <>
-        {searchResults ? (
-          <>
-            <ul className={styles.MovieGallery}>
-              <MovieGalleryItem movies={searchResults} />
-            </ul>
-            {showSpiner && <Spiner />}
-
-            <button
-              className={styles.MovieGallery__Button}
-              type="button"
-              onClick={handleOnClick}
-            >
-              LoadMore
-            </button>
-          </>
+        <ul className={styles.MovieGallery}>
+          <MovieGalleryItem movies={searchResults} />
+        </ul>
+        {showSpiner && <Spiner />}
+        {totalResults - searchResults.length > 0 ? (
+          <button
+            className={styles.MovieGallery__Button}
+            type="button"
+            onClick={handleOnClick}
+          >
+            LoadMore
+          </button>
         ) : (
-          <p>Sorry, nothing was found for your query!</p>
+          <h1>All results for this query are shown</h1>
         )}
-
-        {/* <Button
-              className={styles.MovieGallery__Button}
-              variant="contained"
-              onClick={handleOnClick}
-            >
-              ShowMore
-            </Button> */}
       </>
+    ) : (
+      <h1>Sorry, nothing was found for your query!</h1>
     );
   }
   if (status === "error") {
