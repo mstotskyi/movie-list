@@ -46,6 +46,8 @@ export function MovieGallery({
   const handleOnClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    setShowSpiner(true);
+
     newPicsApiService.incrementPage();
     newPicsApiService
       .fetchMovies()

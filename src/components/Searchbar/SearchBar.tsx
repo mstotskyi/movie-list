@@ -4,6 +4,9 @@ import Button from "@mui/material/Button";
 import styles from "../Searchbar/Searchbar.module.css";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+
 // import InputLabel from "@mui/material/InputLabel";
 
 interface Props {
@@ -73,24 +76,26 @@ export function Searchbar({
           name="year"
           variant="outlined"
           value={searchQueryYear}
-          type="text"
+          type="numeric"
           autoComplete="off"
           title="Year"
           inputProps={{ inputMode: "numeric", pattern: "^[1-9][0-9]{3}$" }}
           onChange={handleOnChange}
         />
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={searchQueryType}
-          label="Type"
-          onChange={handleChange}
-          placeholder="Type"
-        >
-          <MenuItem value="movie">movie</MenuItem>
-          <MenuItem value="series">series</MenuItem>
-          <MenuItem value="episode">episode</MenuItem>
-        </Select>
+        <FormControl fullWidth>
+          <InputLabel id="demo-select-small">Type</InputLabel>
+
+          <Select
+            value={searchQueryType}
+            label="Type"
+            onChange={handleChange}
+            placeholder="Type"
+          >
+            <MenuItem value="movie">movie</MenuItem>
+            <MenuItem value="series">series</MenuItem>
+            <MenuItem value="episode">episode</MenuItem>
+          </Select>
+        </FormControl>
         <Button
           variant="contained"
           type="submit"
