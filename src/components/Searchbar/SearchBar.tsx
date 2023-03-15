@@ -1,94 +1,90 @@
-import { useState } from "react";
+// import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import styles from "../Searchbar/Searchbar.module.css";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-
-// import InputLabel from "@mui/material/InputLabel";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface Props {
-  getSearchQueryName: (searchQueryName: string) => void;
-  getSearchQueryYear: (searchQueryYear: string) => void;
-  getSearchQueryType: (searchQueryType: string) => void;
+  getSearchQueryName: (title: string) => void;
+  getSearchQueryYear: (year: string) => void;
+  getSearchQueryType: (type: string) => void;
 }
+
+type Inputs = {
+  title: string;
+  year: string;
+  type: string;
+};
+
 export function Searchbar({
   getSearchQueryName,
   getSearchQueryYear,
   getSearchQueryType,
 }: Props) {
-  const [searchQueryName, setSearchQueryName] = useState("");
-  const [searchQueryYear, setSearchQueryYear] = useState("");
-  const [searchQueryType, setSearchQueryType] = useState("");
+  const {
+    register,
+    handleSubmit,
+    reset,
 
-  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    formState: { errors },
+  } = useForm<Inputs>({ mode: "onBlur" });
 
-    getSearchQueryName(searchQueryName);
-    getSearchQueryYear(searchQueryYear);
-    getSearchQueryType(searchQueryType);
-    setSearchQueryName("");
-    setSearchQueryYear("");
-    setSearchQueryType("");
-  };
-
-  const handleOnChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    switch (e.target.name) {
-      case "title":
-        setSearchQueryName(e.target.value);
-        break;
-      case "year":
-        setSearchQueryYear(e.target.value);
-        break;
-      default:
-        return;
-    }
-  };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSearchQueryType(event.target.value as string);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    getSearchQueryName(data.title);
+    getSearchQueryYear(data.year);
+    getSearchQueryType(data.type);
+    reset();
   };
 
   return (
     <header className={styles.Searchbar}>
-      <form className={styles.SearchForm} onSubmit={handleOnSubmit}>
+      <form className={styles.SearchForm} onSubmit={handleSubmit(onSubmit)}>
         <TextField
+          defaultValue=""
+          {...register("title", { required: "This field is required" })}
           className={styles.SearchForm__input}
           id="outlined-basic"
-          label="Search by name"
+          label="Search by title"
           name="title"
           variant="outlined"
-          value={searchQueryName}
-          required
           type="text"
           autoComplete="off"
           autoFocus
-          onChange={handleOnChange}
+          error={errors?.title ? true : false}
+          helperText={(errors?.title && errors?.title?.message) || " "}
         />
+
         <TextField
+          defaultValue=""
+          {...register("year", {
+            pattern: {
+              value: /^[1-9][0-9]{3}$/,
+              message: "enter the year in 'yyyy' format",
+            },
+          })}
           className={styles.SearchForm__input}
           id="outlined-basic"
           label="Search by year"
           name="year"
           variant="outlined"
-          value={searchQueryYear}
           type="numeric"
           autoComplete="off"
           title="Year"
-          inputProps={{ inputMode: "numeric", pattern: "^[1-9][0-9]{3}$" }}
-          onChange={handleOnChange}
+          error={errors?.year ? true : false}
+          helperText={(errors?.year && errors?.year?.message) || " "}
         />
         <FormControl fullWidth>
           <InputLabel id="demo-select-small">Type</InputLabel>
 
           <Select
-            value={searchQueryType}
+            defaultValue=""
+            {...register("type")}
             label="Type"
-            onChange={handleChange}
             placeholder="Type"
           >
             <MenuItem value="movie">movie</MenuItem>
