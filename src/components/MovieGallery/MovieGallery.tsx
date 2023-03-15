@@ -66,7 +66,7 @@ export function MovieGallery({
   };
 
   if (status === "init") {
-    return <h1>Hallo! Search something!</h1>;
+    return <h1>Hello! Search something!</h1>;
   }
   if (status === "pending") {
     return <Spiner />;

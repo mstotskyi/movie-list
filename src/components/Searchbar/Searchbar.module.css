@@ -19,10 +19,11 @@
 
 .SearchForm {
   display: flex;
-  align-items: center;
+  align-items: top;
   border-radius: 3px;
   overflow: hidden;
-  padding: 5px;
+  padding-top: 20px;
+  /* padding: 5px; */
   background-color: #dadce7;
 }
 
