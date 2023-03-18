@@ -44,44 +44,49 @@ export function Searchbar({
   return (
     <header className={styles.Searchbar}>
       <form className={styles.SearchForm} onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          defaultValue=""
-          {...register("title", { required: "This field is required" })}
-          className={styles.SearchForm__input}
-          id="outlined-basic"
-          label="Search by title"
-          name="title"
-          variant="outlined"
-          type="text"
-          autoComplete="off"
-          autoFocus
-          error={errors?.title ? true : false}
-          helperText={(errors?.title && errors?.title?.message) || " "}
-        />
-
-        <TextField
-          defaultValue=""
-          {...register("year", {
-            pattern: {
-              value: /^[1-9][0-9]{3}$/,
-              message: "enter the year in 'yyyy' format",
-            },
-          })}
-          className={styles.SearchForm__input}
-          id="outlined-basic"
-          label="Search by year"
-          name="year"
-          variant="outlined"
-          type="numeric"
-          autoComplete="off"
-          title="Year"
-          error={errors?.year ? true : false}
-          helperText={(errors?.year && errors?.year?.message) || " "}
-        />
-        <FormControl fullWidth>
+        <FormControl className={styles.SearchForm__input}>
+          <TextField
+            fullWidth
+            defaultValue=""
+            {...register("title", { required: "This field is required" })}
+            id="outlined-basic"
+            label="Search by title"
+            name="title"
+            variant="outlined"
+            type="text"
+            autoComplete="off"
+            autoFocus
+            error={errors?.title ? true : false}
+            helperText={(errors?.title && errors?.title?.message) || " "}
+          />
+        </FormControl>
+        <FormControl className={styles.SearchForm__input}>
+          {" "}
+          <TextField
+            fullWidth
+            defaultValue=""
+            {...register("year", {
+              pattern: {
+                value: /^[1-9][0-9]{3}$/,
+                message: "enter the year in 'yyyy' format",
+              },
+            })}
+            id="outlined-basic"
+            label="Search by year"
+            name="year"
+            variant="outlined"
+            type="numeric"
+            autoComplete="off"
+            title="Year"
+            error={errors?.year ? true : false}
+            helperText={(errors?.year && errors?.year?.message) || " "}
+          />
+        </FormControl>
+        <FormControl className={styles.SearchForm__input}>
           <InputLabel id="demo-select-small">Type</InputLabel>
 
           <Select
+            fullWidth
             defaultValue=""
             {...register("type")}
             label="Type"

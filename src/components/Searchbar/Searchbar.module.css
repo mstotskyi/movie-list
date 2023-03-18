@@ -20,10 +20,14 @@
 .SearchForm {
   display: flex;
   align-items: top;
-  border-radius: 3px;
+  border-radius: 10px;
+  width: 100%;
   overflow: hidden;
   padding-top: 20px;
-  /* padding: 5px; */
+  padding-left: 20px;
+  padding-right: 20px;
+  justify-content: flex-start;
+
   background-color: #dadce7;
 }
 
@@ -38,13 +42,15 @@
 
 .SearchForm__input {
   display: inline-block;
-  width: 100%;
   font: inherit;
   font-size: 20px;
   border: none;
   outline: none;
   padding-left: 4px;
   padding-right: 4px;
+  width: calc(1 / 3 * 100% - 10px);
+
+  margin: 5px;
 }
 
 .SearchForm__input::placeholder {
