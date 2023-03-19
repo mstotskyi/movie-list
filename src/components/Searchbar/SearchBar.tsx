@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import styles from "../Searchbar/Searchbar.module.css";
@@ -9,9 +8,7 @@ import InputLabel from "@mui/material/InputLabel";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 interface Props {
-  getSearchQueryName: (title: string) => void;
-  getSearchQueryYear: (year: string) => void;
-  getSearchQueryType: (type: string) => void;
+  handleSubmitForm: (data: {}) => void;
 }
 
 type Inputs = {
@@ -20,11 +17,7 @@ type Inputs = {
   type: string;
 };
 
-export function Searchbar({
-  getSearchQueryName,
-  getSearchQueryYear,
-  getSearchQueryType,
-}: Props) {
+export function Searchbar({ handleSubmitForm }: Props) {
   const {
     register,
     handleSubmit,
@@ -34,10 +27,7 @@ export function Searchbar({
   } = useForm<Inputs>({ mode: "onBlur" });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    getSearchQueryName(data.title);
-    getSearchQueryYear(data.year);
-    getSearchQueryType(data.type);
+    handleSubmitForm(data);
     reset();
   };
 

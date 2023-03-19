@@ -2,30 +2,62 @@ import "./App.css";
 import { useState } from "react";
 import { MovieGallery } from "./components/MovieGallery/MovieGallery";
 import { Searchbar } from "./components/Searchbar/SearchBar";
+import MoviesApiService from "./services/apiService";
+
+const newMoviesApiService = new MoviesApiService();
+console.log(newMoviesApiService);
 
 function App() {
-  const [searchQueryName, setSearchQueryName] = useState("");
-  const [searchQueryYear, setSearchQueryYear] = useState("");
-  const [searchQueryType, setSearchQueryType] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [status, setStatus] = useState("init");
+  const [showSpiner, setShowSpiner] = useState(false);
+  const [totalResults, setTotalResults] = useState(0);
 
-  const getSearchQueryName = (searchQueryName) =>
-    setSearchQueryName(searchQueryName);
-  const getSearchQueryYear = (searchQueryYear) =>
-    setSearchQueryYear(searchQueryYear);
-  const getSearchQueryType = (searchQueryType) =>
-    setSearchQueryType(searchQueryType);
+  const handleSubmitForm = (data) => {
+    setStatus("pending");
+    newMoviesApiService.searchQuery = data;
+    newMoviesApiService.resetPage();
+    newMoviesApiService
+      .fetchMovies()
+      .then((result) => {
+        setSearchResults(result.Search);
+        setTotalResults(result.totalResults);
+        setStatus("success");
+      })
+      .catch((error) => {
+        setStatus("error");
+      });
+  };
+
+  const handleOnClick = (e) => {
+    setShowSpiner(true);
+
+    newMoviesApiService.incrementPage();
+    newMoviesApiService
+      .fetchMovies()
+      .then((result) => {
+        setSearchResults((prevState) => [...prevState, ...result.Search]);
+        setShowSpiner(false);
+        setStatus("success");
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth",
+        });
+      })
+      .catch((error) => {
+        setStatus("error");
+      });
+  };
 
   return (
     <div className="App">
-      <Searchbar
-        getSearchQueryName={getSearchQueryName}
-        getSearchQueryYear={getSearchQueryYear}
-        getSearchQueryType={getSearchQueryType}
-      />
+      <Searchbar handleSubmitForm={handleSubmitForm} />
       <MovieGallery
-        searchQueryName={searchQueryName}
-        searchQueryYear={searchQueryYear}
-        searchQueryType={searchQueryType}
+        searchResults={searchResults}
+        handleOnClick={handleOnClick}
+        status={status}
+        totalResults={totalResults}
+        showSpiner={showSpiner}
       />
     </div>
   );
