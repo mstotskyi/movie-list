@@ -5,7 +5,6 @@ import { Searchbar } from "./components/Searchbar/SearchBar";
 import MoviesApiService from "./services/apiService";
 
 const newMoviesApiService = new MoviesApiService();
-console.log(newMoviesApiService);
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
