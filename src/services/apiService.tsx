@@ -1,15 +1,19 @@
 export default class MoviesApiService {
-  searchQueryName: string;
-  searchQueryYear: string;
-  searchQueryType: string;
+  searchQuery: {
+    title: string;
+    year: string;
+    type: string;
+  };
   page: number;
   total: number;
   response: boolean;
 
   constructor() {
-    this.searchQueryName = " ";
-    this.searchQueryYear = "";
-    this.searchQueryType = "";
+    this.searchQuery = {
+      title: "",
+      year: "",
+      type: "",
+    };
     this.page = 1;
     this.total = 0;
     this.response = false;
@@ -18,7 +22,7 @@ export default class MoviesApiService {
   fetchMovies() {
     const API_KEY = "a5f3b75f";
     const BASE_URL = "https://www.omdbapi.com/";
-    const URL = `${BASE_URL}?s=${this.searchQueryName}&y=${this.searchQueryYear}&type=${this.searchQueryType}&apikey=${API_KEY}&page=${this.page}`;
+    const URL = `${BASE_URL}?s=${this.searchQuery.title}&y=${this.searchQuery.year}&type=${this.searchQuery.type}&apikey=${API_KEY}&page=${this.page}`;
     return fetch(URL)
       .then((response) => response.json())
       .then((data) => {
@@ -40,30 +44,18 @@ export default class MoviesApiService {
     this.total = totalResults;
   }
 
-  get queryName() {
-    return this.searchQueryName;
+  get query() {
+    return this.searchQuery;
   }
-  get queryYear() {
-    return this.searchQueryYear;
-  }
-  get queryType() {
-    return this.searchQueryType;
-  }
+
   get queryResponse() {
     return this.response;
   }
 
-  set queryName(newQueryName) {
-    this.searchQueryName = newQueryName;
+  set query(newQuery) {
+    this.searchQuery = newQuery;
   }
 
-  set queryYear(newQueryYear) {
-    this.searchQueryYear = newQueryYear;
-  }
-
-  set queryType(newQueryType) {
-    this.searchQueryType = newQueryType;
-  }
   set queryResponse(newQueryResponse) {
     this.response = newQueryResponse;
   }

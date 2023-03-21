@@ -1,78 +1,29 @@
-import { useState, useEffect } from "react";
 import styles from "../MovieGallery/MovieGallery.module.css";
-import PicsApiService from "../../services/apiService";
 import { MovieGalleryItem } from "../MovieGalleryItem/MovieGalleryItem";
 import Spiner from "../Loader/Loader";
-import { Options } from "../../services/types";
-const newPicsApiService = new PicsApiService();
 
 interface Props {
-  searchQueryName: string;
-  searchQueryYear: string;
-  searchQueryType: string;
+  handleOnClick: (data: {}) => void;
+  searchResults: [];
+  totalResults: number;
+  showSpiner: boolean;
+  status: string;
 }
 
 export function MovieGallery({
-  searchQueryName,
-  searchQueryYear,
-  searchQueryType,
+  handleOnClick,
+  searchResults,
+  totalResults,
+  showSpiner,
+  status,
 }: Props) {
-  const [searchResults, setSearchResults] = useState<Options[]>([]);
-  const [status, setStatus] = useState<string>("init");
-  const [showSpiner, setShowSpiner] = useState<boolean>(false);
-  const [totalResults, setTotalResults] = useState<number>(0);
-
-  useEffect(() => {
-    if (searchQueryName === "") {
-      return;
-    }
-    setStatus("pending");
-    newPicsApiService.queryName = searchQueryName;
-    newPicsApiService.queryYear = searchQueryYear;
-    newPicsApiService.queryType = searchQueryType;
-    newPicsApiService.resetPage();
-    newPicsApiService
-      .fetchMovies()
-      .then((result) => {
-        setSearchResults(result.Search);
-        setTotalResults(result.totalResults);
-        setStatus("success");
-      })
-      .catch((error) => {
-        setStatus("error");
-      });
-  }, [searchQueryName, searchQueryYear, searchQueryType]);
-
-  const handleOnClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    setShowSpiner(true);
-
-    newPicsApiService.incrementPage();
-    newPicsApiService
-      .fetchMovies()
-      .then((result) => {
-        setSearchResults((prevState) => [...prevState, ...result.Search]);
-        setShowSpiner(false);
-        setStatus("success");
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: "smooth",
-        });
-      })
-      .catch((error) => {
-        setStatus("error");
-      });
-  };
-
   if (status === "init") {
-    return <h1>Hallo! Search something!</h1>;
+    return <h1>Hello! Search something!</h1>;
   }
   if (status === "pending") {
     return <Spiner />;
   }
   if (status === "success") {
-    console.log(searchResults);
     return searchResults ? (
       <>
         <ul className={styles.MovieGallery}>
