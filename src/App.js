@@ -2,7 +2,9 @@ import "./App.css";
 import { useState } from "react";
 import { MovieGallery } from "./components/MovieGallery/MovieGallery";
 import { Searchbar } from "./components/Searchbar/SearchBar";
+import { useDispatch } from "react-redux";
 import MoviesApiService from "./services/apiService";
+import { searchMovieAction } from "./redux/actions";
 
 const newMoviesApiService = new MoviesApiService();
 
@@ -12,6 +14,8 @@ function App() {
   const [showSpiner, setShowSpiner] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
 
+  const dispatch = useDispatch();
+
   const handleSubmitForm = (data) => {
     setStatus("pending");
     newMoviesApiService.searchQuery = data;
@@ -19,6 +23,8 @@ function App() {
     newMoviesApiService
       .fetchMovies()
       .then((result) => {
+        dispatch(searchMovieAction(result.Search));
+
         setSearchResults(result.Search);
         setTotalResults(result.totalResults);
         setStatus("success");
