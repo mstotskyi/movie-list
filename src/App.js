@@ -18,7 +18,7 @@ const newMoviesApiService = new MoviesApiService();
 
 function App() {
   const [status, setStatus] = useState("");
-  const [showSpiner, setShowSpiner] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const movie = useSelector(getMovies);
   const searchQuery = useSelector(getSearchQuery);
@@ -48,7 +48,7 @@ function App() {
   };
 
   const handleOnClick = (page) => {
-    setShowSpiner(true);
+    setShowSpinner(true);
     newMoviesApiService.searchQuery = searchQuery;
 
     newMoviesApiService.changePage(page);
@@ -56,7 +56,7 @@ function App() {
       .fetchMovies()
       .then((result) => {
         dispatch(loadMoreAction(result.Search));
-        setShowSpiner(false);
+        setShowSpinner(false);
         setStatus("success");
         window.scrollTo({
           top: document.documentElement.scrollHeight,
@@ -71,7 +71,7 @@ function App() {
   return (
     <div className="App">
       <Searchbar handleSubmitForm={handleSubmitForm} />
-      <MovieGallery status={status} showSpiner={showSpiner}></MovieGallery>
+      <MovieGallery status={status} showSpinner={showSpinner}></MovieGallery>
       <PaginationPages handleOnClick={handleOnClick} />
     </div>
   );
