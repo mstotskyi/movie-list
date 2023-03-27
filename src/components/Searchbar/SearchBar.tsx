@@ -6,6 +6,9 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+
+import { queryAction } from "../../redux/actions";
 
 interface Props {
   handleSubmitForm: (data: {}) => void;
@@ -18,6 +21,8 @@ type Inputs = {
 };
 
 export function Searchbar({ handleSubmitForm }: Props) {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -28,6 +33,8 @@ export function Searchbar({ handleSubmitForm }: Props) {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     handleSubmitForm(data);
+    dispatch(queryAction(data));
+
     reset();
   };
 

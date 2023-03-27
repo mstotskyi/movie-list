@@ -12,7 +12,7 @@ import {
   loadMoreAction,
   getTotalMovieAction,
 } from "./redux/actions";
-import { getMovies, getCurrentPage } from "./redux/selectors";
+import { getMovies, getCurrentPage, getSearchQuery } from "./redux/selectors";
 
 const newMoviesApiService = new MoviesApiService();
 
@@ -21,7 +21,8 @@ function App() {
   const [showSpiner, setShowSpiner] = useState(false);
 
   const movie = useSelector(getMovies);
-  const page = useSelector(getCurrentPage);
+  const searchQuery = useSelector(getSearchQuery);
+
   useEffect(() => {
     movie.length === 0 ? setStatus("init") : setStatus("success");
   }, [movie.length]);
@@ -48,6 +49,7 @@ function App() {
 
   const handleOnClick = (page) => {
     setShowSpiner(true);
+    newMoviesApiService.searchQuery = searchQuery;
 
     newMoviesApiService.changePage(page);
     newMoviesApiService
@@ -69,7 +71,7 @@ function App() {
   return (
     <div className="App">
       <Searchbar handleSubmitForm={handleSubmitForm} />
-      <MovieGallery status={status} showSpiner={showSpiner} />
+      <MovieGallery status={status} showSpiner={showSpiner}></MovieGallery>
       <PaginationPages handleOnClick={handleOnClick} />
     </div>
   );

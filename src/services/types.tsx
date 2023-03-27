@@ -5,4 +5,8 @@ export type Options = {
   Year: number;
 };
 
-export {};
+export type TypesQuery = {
+  title: string;
+  year: string;
+  type: string;
+};

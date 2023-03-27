@@ -8,8 +8,9 @@ import {
   loadMoreAction,
   getTotalMovieAction,
   currentPage,
+  queryAction,
 } from "./actions";
-import { Options } from "../services/types";
+import { Options, TypesQuery } from "../services/types";
 
 export type RootState = ReturnType<typeof rootReducer>;
 
@@ -18,6 +19,7 @@ interface Props {
   totalResult: number;
   currentPage: number;
   pageSize: number;
+  searchQuery: TypesQuery;
 }
 
 const initialState = {
@@ -25,6 +27,11 @@ const initialState = {
   totalResult: 0,
   currentPage: 1,
   pageSize: 10,
+  searchQuery: {
+    title: "",
+    year: "",
+    type: "",
+  },
 } as Props;
 
 const persistConfig = {
@@ -64,10 +71,20 @@ const currentPageReducer = createReducer(
   }
 );
 
+const searchQueryReducer = createReducer(
+  initialState.searchQuery,
+  (builder) => {
+    builder.addCase(queryAction, (state, { payload }) => {
+      return payload;
+    });
+  }
+);
+
 const rootReducer = combineReducers({
   movie: moviesReducer,
   totalResult: totalResultReducer,
   currentPage: currentPageReducer,
+  searchQuery: searchQueryReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);
