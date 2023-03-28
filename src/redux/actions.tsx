@@ -3,7 +3,7 @@ import { Options, TypesQuery } from "../services/types";
 
 export const searchMovieAction = createAction<Options[]>("movie/searchMovie");
 
-export const resetMovieAction = createAction<[]>("store/resetStore");
+export const resetStorAction = createAction<[]>("store/resetStore");
 
 export const loadMoreAction = createAction<Options[]>("movie/loadMore");
 

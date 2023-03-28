@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { queryAction } from "../../redux/actions";
 
@@ -27,14 +27,12 @@ export function Searchbar({ handleSubmitForm }: Props) {
     register,
     handleSubmit,
     reset,
-
     formState: { errors },
   } = useForm<Inputs>({ mode: "onBlur" });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     handleSubmitForm(data);
     dispatch(queryAction(data));
-
     reset();
   };
 

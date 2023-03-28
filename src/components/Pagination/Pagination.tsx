@@ -3,9 +3,6 @@ import Stack from "@mui/material/Stack";
 import { getTotalResult, getCurrentPage } from "../../redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { currentPage } from "../../redux/actions";
-// import MoviesApiService from "../../services/apiService";
-
-// const newMoviesApiService = new MoviesApiService();
 
 interface Props {
   handleOnClick: (data: {}) => void;

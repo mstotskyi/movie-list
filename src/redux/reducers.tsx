@@ -4,7 +4,7 @@ import storage from "redux-persist/lib/storage";
 
 import {
   searchMovieAction,
-  resetMovieAction,
+  resetStorAction,
   loadMoreAction,
   getTotalMovieAction,
   currentPage,
@@ -45,7 +45,7 @@ const moviesReducer = createReducer(initialState.movie, (builder) => {
     .addCase(searchMovieAction, (state, { payload }) => {
       return [...state, ...payload];
     })
-    .addCase(resetMovieAction, (state = initialState.movie, { payload }) => {
+    .addCase(resetStorAction, (state = initialState.movie, { payload }) => {
       return [...payload];
     })
     .addCase(loadMoreAction, (state, { payload }) => {
