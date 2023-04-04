@@ -71,7 +71,7 @@ function App() {
   return (
     <div className="App">
       <Searchbar handleSubmitForm={handleSubmitForm} />
-      <MovieGallery status={status} showSpinner={showSpinner}></MovieGallery>
+      <MovieGallery status={status} showSpinner={showSpinner} />
       <PaginationPages handleOnClick={handleOnClick} />
     </div>
   );
