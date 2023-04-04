@@ -1,6 +1,6 @@
 import { Circles } from "react-loader-spinner";
 
-export default function Spiner() {
+export default function Spinner() {
   const style: {} = {
     position: "fixed",
     top: "50%",

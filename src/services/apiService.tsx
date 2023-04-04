@@ -32,8 +32,8 @@ export default class MoviesApiService {
       });
   }
 
-  incrementPage() {
-    this.page += 1;
+  changePage(page: number) {
+    this.page = page;
   }
 
   resetPage() {

@@ -1,26 +1,45 @@
 import "./App.css";
-import { useState } from "react";
-import { MovieGallery } from "./components/MovieGallery/MovieGallery";
+import { useState, useEffect } from "react";
 import { Searchbar } from "./components/Searchbar/SearchBar";
+import { MovieGallery } from "./components/MovieGallery/MovieGallery";
+import { PaginationPages } from "./components/Pagination/Pagination";
+
+import { useDispatch, useSelector } from "react-redux";
 import MoviesApiService from "./services/apiService";
+import {
+  searchMovieAction,
+  resetStorAction,
+  loadMoreAction,
+  getTotalMovieAction,
+} from "./redux/actions";
+import { getMovies, getSearchQuery } from "./redux/selectors";
 
 const newMoviesApiService = new MoviesApiService();
 
 function App() {
-  const [searchResults, setSearchResults] = useState([]);
-  const [status, setStatus] = useState("init");
-  const [showSpiner, setShowSpiner] = useState(false);
-  const [totalResults, setTotalResults] = useState(0);
+  const [status, setStatus] = useState("");
+  const [showSpinner, setShowSpinner] = useState(false);
+
+  const movie = useSelector(getMovies);
+  const searchQuery = useSelector(getSearchQuery);
+
+  useEffect(() => {
+    movie.length === 0 ? setStatus("init") : setStatus("success");
+  }, [movie.length]);
+
+  const dispatch = useDispatch();
 
   const handleSubmitForm = (data) => {
     setStatus("pending");
+    dispatch(resetStorAction([]));
+
     newMoviesApiService.searchQuery = data;
     newMoviesApiService.resetPage();
     newMoviesApiService
       .fetchMovies()
       .then((result) => {
-        setSearchResults(result.Search);
-        setTotalResults(result.totalResults);
+        dispatch(searchMovieAction(result.Search));
+        dispatch(getTotalMovieAction(result.totalResults));
         setStatus("success");
       })
       .catch((error) => {
@@ -28,15 +47,16 @@ function App() {
       });
   };
 
-  const handleOnClick = (e) => {
-    setShowSpiner(true);
+  const handleOnClick = (page) => {
+    setShowSpinner(true);
+    newMoviesApiService.searchQuery = searchQuery;
 
-    newMoviesApiService.incrementPage();
+    newMoviesApiService.changePage(page);
     newMoviesApiService
       .fetchMovies()
       .then((result) => {
-        setSearchResults((prevState) => [...prevState, ...result.Search]);
-        setShowSpiner(false);
+        dispatch(loadMoreAction(result.Search));
+        setShowSpinner(false);
         setStatus("success");
         window.scrollTo({
           top: document.documentElement.scrollHeight,
@@ -51,13 +71,8 @@ function App() {
   return (
     <div className="App">
       <Searchbar handleSubmitForm={handleSubmitForm} />
-      <MovieGallery
-        searchResults={searchResults}
-        handleOnClick={handleOnClick}
-        status={status}
-        totalResults={totalResults}
-        showSpiner={showSpiner}
-      />
+      <MovieGallery status={status} showSpinner={showSpinner} />
+      <PaginationPages handleOnClick={handleOnClick} />
     </div>
   );
 }
